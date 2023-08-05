@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div th:replace="~{layout/navbar}"></div>
+
+	<div class="container">
+	<h1>Member 註冊</h1>
+	
+	<form th:action="@{/member/postAdd}" method="post">
+ 
+
+  <div class="container">
+    <label for="memberName"><b>Membername</b></label>
+    <input type="text" placeholder="Enter Username" name="memberName" required>
+
+    <label for="memberPwd"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="memberPwd" required>
+    <p th:text="${errorMsg}"></p>
+    <p th:text="${okMsg}"></p>
+    <button type="submit">Login</button>
+  
+  </div>
+</form>
+
+    </div>
+
+</body>
+</html>
