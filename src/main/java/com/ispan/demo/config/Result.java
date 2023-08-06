@@ -2,9 +2,7 @@ package com.ispan.demo.config;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import lombok.Data;
-@Data
+//@Data
 public class Result<T> {
 	private Integer code;	//編碼:1成功, 0和其他數據失敗
 	private T data;	//數據
@@ -32,5 +30,43 @@ public class Result<T> {
         this.map.put(key, value);
         return this;
     }
+
+	public Integer getCode() {
+		return code;
+	}
+
+	public void setCode(Integer code) {
+		this.code = code;
+	}
+
+	public T getData() {
+		return data;
+	}
+
+	public void setData(T data) {
+		this.data = data;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+	public Map getMap() {
+		return map;
+	}
+
+	public void setMap(Map map) {
+		this.map = map;
+	}
+
+	public Result() {
+		super();
+	}
+	
+	
 
 }

@@ -1,6 +1,5 @@
 package com.ispan.demo.service;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.ispan.demo.model.User;
 import com.ispan.demo.model.UserRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class UserService {
@@ -24,6 +21,10 @@ public class UserService {
 	
 	// 新增
 	public User insertUser(User user) {
+		User findByUserName = userRepository.findByUserName(user.getUserName());
+		if(findByUserName!=null && findByUserName.getUserName().equals(user.getUserName())) {
+			return null;
+		}
 		return userRepository.save(user);
 			
 	}
@@ -38,7 +39,6 @@ public class UserService {
 
 	public User updateUserById(User user,Integer id) {
 		Optional<User> option = userRepository.findById(id);
-		System.out.println(user);
 		if (option.isEmpty()) {
 			
 			return null;

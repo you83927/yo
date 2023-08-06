@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ispan.demo.config.Result;
@@ -28,14 +29,14 @@ public class UserController {
 	private UserFavoriteSrevice userFavoriteSrevice; 
 
 	//初始註冊
-	@PostMapping("user/insert")
+	@PostMapping("/user/insert")
+	@ResponseBody
 	public Result<User> insertUser(
 //			@RequestParam("UserName")String userName,@RequestParam("UserPwd")String pwd
 //			,@RequestParam("identity")Integer identity,@RequestParam("modifiedBy")String modifiedBy
 //			,@RequestParam("status")Boolean status,@RequestParam("violateCount")Integer violateCount,Model model
 			@RequestBody User user
 			) {
-		
 //		user.setUserName(userName);
 //		user.setPassWord(pwd);
 //		user.setIdentity(identity);
@@ -46,6 +47,9 @@ public class UserController {
 		user.onUpdate();
 	
 		User insertUser = userService.insertUser(user);
+		if (insertUser==null) {
+			return Result.error("使用者名字重複");
+		}
 		return Result.success(insertUser);
 	}
 	
@@ -77,6 +81,8 @@ public class UserController {
 		return Result.success("更新成功");
 		
 	}
+	
+
 	
 	//刪除使用者
 	@DeleteMapping("user/delete")
