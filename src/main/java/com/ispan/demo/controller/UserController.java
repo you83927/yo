@@ -337,8 +337,9 @@ public class UserController {
 	
 	//追蹤列表
 	@GetMapping("user/follow")
-	public Result<List<Follower>> findFollow(@RequestParam Integer userId){
-		List<Follower> list = followSrevice.findByUserId(userId);
+	public Result<List<Follower>> findFollow(HttpSession session){
+		User user = (User)session.getAttribute("user");
+		List<Follower> list = followSrevice.findByUserId(user.getId());
 		if(list==null) {
 			return Result.error("沒有追蹤");
 		}
