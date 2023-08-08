@@ -2,6 +2,7 @@ package com.ispan.demo.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -207,6 +208,15 @@ public class User {
 
 	public User() {
 		super();
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", userName=" + userName + ", passWord=" + passWord + ", identity=" + identity
+				+ ", nickName=" + nickName + ", photo=" + Arrays.toString(photo) + ", gender=" + gender + ", email="
+				+ email + ", birthday=" + birthday + ", status=" + status + ", violateCount=" + violateCount
+				+ ", modifiedDate=" + modifiedDate + ", createdDate=" + createdDate + ", modifiedBy=" + modifiedBy
+				+ "]";
 	}
 
 //	@OneToMany(cascade =CascadeType.ALL,mappedBy = "userId")

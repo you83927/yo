@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ispan.demo.config.Result;
 import com.ispan.demo.model.Follower;
@@ -57,7 +58,8 @@ public class UserController {
 		User user = userService.checkLogin(loginName, loginPwd);
 
 		if (user != null) {
-			httpSession.setAttribute("loginName", user);
+			user.setPassWord(null);
+			httpSession.setAttribute("user", user);
 			return Result.success(user);
 		}
 		return Result.error("noLogin");
@@ -73,26 +75,53 @@ public class UserController {
 	}
 
 	// 基本資料
-	@GetMapping("user/{id}")
-	public Result<User> userDetial(@PathVariable Integer id) {
-		User user = userService.findUserById(id);
-
-		return Result.success(user);
+//	@GetMapping("user/{id}")
+//	public Result<User> userDetial(@PathVariable Integer id) {
+//		User user = userService.findUserById(id);
+//
+//		return Result.success(user);
+//	}
+	@GetMapping("user/detial")
+	public Result<User> userDetial(HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		if(user!=null) { 
+			return Result.success(user);
+			
+		}
+		return Result.error("User details not found in session");
 	}
 
 	// 更新
-	@Transactional
-	@PutMapping("user/modify/{id}")
-	public Result<String> modifyUser(@PathVariable Integer id, @RequestBody User user) {
-
-		User updateUserById = userService.updateUserById(user, id);
+//	@Transactional
+//	@PutMapping("user/modify/{id}")
+//	public Result<String> modifyUser(@PathVariable Integer id, @RequestBody User user) {
+//
+//		User updateUserById = userService.updateUserById(user, id);
+//
+//		if (updateUserById == null) {
+//			return Result.error("更新失敗");
+//		}
+//		return Result.success("更新成功");
+//
+//	}
+	
+	
+	@PutMapping("user/modify")
+	public Result<String> modifyUser(HttpSession session,@RequestBody User newUser) {
+		System.out.println(newUser);
+		User user = (User) session.getAttribute("user");
+		newUser.setId(user.getId());
+		User updateUserById = userService.updateUserById(newUser);
 
 		if (updateUserById == null) {
+		
 			return Result.error("更新失敗");
 		}
+		session.setAttribute("user", newUser);
 		return Result.success("更新成功");
 
 	}
+	
 
 	// 刪除使用者
 	@DeleteMapping("user/delete")
@@ -126,9 +155,10 @@ public class UserController {
 	}
 
 	// 最愛列表
-	@GetMapping("user/favorite/{userId}")
-	public Result<List<UserFavorite>> showUserFavorite(@PathVariable Integer userId) {
-		List<UserFavorite> favorite = userFavoriteService.findByUserId(userId);
+	@GetMapping("user/favorite")
+	public Result<List<UserFavorite>> showUserFavorite(HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		List<UserFavorite> favorite = userFavoriteService.findByUserId(user.getId());
 		if (favorite == null) {
 			return Result.error("沒有favorite");
 		}
@@ -138,9 +168,9 @@ public class UserController {
 
 	// 以articleId查詢最愛文章
 	@GetMapping("user/favorite/article")
-	public Result<List<UserFavorite>> showUserFavoriteArticle(@RequestParam Integer userId,
-			@RequestParam Integer articleId) {
-		List<UserFavorite> favorite = userFavoriteService.findByUserId(userId);
+	public Result<List<UserFavorite>> showUserFavoriteArticle(HttpSession session,@RequestParam Integer articleId) {
+		User user = (User) session.getAttribute("user");
+		List<UserFavorite> favorite = userFavoriteService.findByUserId(user.getId());
 		if (favorite.isEmpty()) {
 			return Result.error("沒有 favorite article");
 		}
@@ -155,8 +185,9 @@ public class UserController {
 
 	// 查詢所有最愛文章
 	@GetMapping("user/favorite/articles")
-	public Result<List<Integer>> showUserFavoriteArticles(@RequestParam Integer userId) {
-		List<Integer> favoriteArticleIds = userFavoriteService.findArticleIdsByUserId(userId);
+	public Result<List<Integer>> showUserFavoriteArticles(HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		List<Integer> favoriteArticleIds = userFavoriteService.findArticleIdsByUserId(user.getId());
 
 		if (favoriteArticleIds.isEmpty()) {
 			return Result.error("没有 favorite articles");
@@ -184,8 +215,9 @@ public class UserController {
 
 	// 查詢所有最愛餐廳
 	@GetMapping("user/favorite/restaurants")
-	public Result<List<Integer>> showUserFavoriteRestaurants(@RequestParam Integer userId) {
-		List<Integer> favoriteRestaurants = userFavoriteService.findRestaurantIdsByUserId(userId);
+	public Result<List<Integer>> showUserFavoriteRestaurants(HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		List<Integer> favoriteRestaurants = userFavoriteService.findRestaurantIdsByUserId(user.getId());
 
 		if (favoriteRestaurants.isEmpty()) {
 			return Result.error("没有 favorite restaurants");
@@ -211,8 +243,9 @@ public class UserController {
 
 	// 查詢所有最愛食物
 	@GetMapping("user/favorite/foods")
-	public Result<List<Integer>> showUserFavoriteFoods(@RequestParam Integer userId) {
-		List<Integer> favoriteFoods = userFavoriteService.findFoodIdsByUserId(userId);
+	public Result<List<Integer>> showUserFavoriteFoods(HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		List<Integer> favoriteFoods = userFavoriteService.findFoodIdsByUserId(user.getId());
 
 		if (favoriteFoods.isEmpty()) {
 			return Result.error("没有 favorite foods");
@@ -302,6 +335,7 @@ public class UserController {
 		return Result.success("刪除成功");
 	}
 	
+	//追蹤列表
 	@GetMapping("user/follow")
 	public Result<List<Follower>> findFollow(@RequestParam Integer userId){
 		List<Follower> list = followSrevice.findByUserId(userId);
@@ -309,6 +343,17 @@ public class UserController {
 			return Result.error("沒有追蹤");
 		}
 		return Result.success(list);
+	}
+	
+	//照片上傳
+	@PostMapping("user/photo/{id}")
+	public String uploadUserPhoto(@PathVariable Integer id,@RequestParam("file") MultipartFile file){
+		 Result<String> result = userService.uploadPhoto(id, file);
+		 if(result.getCode()==0) {
+			 return result.getMsg();
+		 }
+
+	        return result.getData();
 	}
 						
 }
