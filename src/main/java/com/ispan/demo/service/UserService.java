@@ -21,8 +21,8 @@ public class UserService {
 	
 	// 新增
 	public User insertUser(User user) {
-		User findByUserName = userRepository.findByUserName(user.getUserName());
-		if(findByUserName!=null && findByUserName.getUserName().equals(user.getUserName())) {
+		boolean existsByUserName = userRepository.existsByUserName(user.getUserName());
+		if(existsByUserName) {
 			return null;
 		}
 		return userRepository.save(user);
@@ -68,5 +68,15 @@ public class UserService {
 		}
 		return null;
 	}
+	
+	public User checkLogout(String userName, String pwd) {
+		User user = userRepository.findByUserName(userName);
+
+		if (user!=null &&user.getUserName().equals(userName) && user.getPassWord().equals(pwd)) {
+			return null;
+		}
+		return user;
+	}
+	
 
 }
