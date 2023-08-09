@@ -3,12 +3,14 @@ package com.ispan.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +28,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 
 @RestController
+@CrossOrigin()
+@RequestMapping(path = {"/"})
 public class UserController {
 
 	@Autowired
@@ -38,7 +42,7 @@ public class UserController {
 	private FollowSrevice followSrevice;
 
 	// 初始註冊
-	@PostMapping("/user/insert")
+	@PostMapping("user/insert")
 	@ResponseBody
 	public Result<User> insertUser(@RequestBody User user) {
 		user.onCreate();
@@ -53,16 +57,18 @@ public class UserController {
 
 	// 登入
 	@PostMapping("user/login")
-	public Result<User> loginUser(@RequestParam String loginName, @RequestParam String loginPwd,
-			HttpSession httpSession) {
-		User user = userService.checkLogin(loginName, loginPwd);
+	public Result<String> loginUser(
+//			@RequestParam String loginName, @RequestParam String loginPwd,
+			@RequestBody  User login
+			,HttpSession httpSession) {
+		User user = userService.checkLogin(login.getUserName(), login.getPassWord());
 
 		if (user != null) {
 			user.setPassWord(null);
 			httpSession.setAttribute("user", user);
-			return Result.success(user);
+			return Result.success("login success");
 		}
-		return Result.error("noLogin");
+		return Result.error("no Login");
 	}
 
 	// 登出
@@ -337,8 +343,9 @@ public class UserController {
 	
 	//追蹤列表
 	@GetMapping("user/follow")
-	public Result<List<Follower>> findFollow(@RequestParam Integer userId){
-		List<Follower> list = followSrevice.findByUserId(userId);
+	public Result<List<Follower>> findFollow(HttpSession session){
+		User user = (User)session.getAttribute("user");
+		List<Follower> list = followSrevice.findByUserId(user.getId());
 		if(list==null) {
 			return Result.error("沒有追蹤");
 		}
