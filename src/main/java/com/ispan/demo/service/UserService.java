@@ -117,4 +117,10 @@ public class UserService {
             return Result.error("照片上傳失敗：" + e.getMessage());
         }
 	}
+	
+//	public User getUserWithFavoriteArticles(Integer userId) {
+//        return userRepository.findUserWithFavoriteArticles(userId);
+//    }
+	
+	
 }

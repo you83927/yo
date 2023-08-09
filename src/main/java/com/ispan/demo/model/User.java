@@ -2,6 +2,7 @@ package com.ispan.demo.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -68,6 +70,9 @@ public class User {
 
 	@Column(name = "modified_by", columnDefinition = "sysname")
 	private String modifiedBy;
+	
+//	  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//	    private List<UserFavorite> userFavorites = new ArrayList<>();
 
 	@PrePersist
 	public void onCreate() {

@@ -66,6 +66,8 @@ public class UserController {
 		if (user != null) {
 			user.setPassWord(null);
 			httpSession.setAttribute("user", user);
+			System.out.println(user);
+			
 			return Result.success("login success");
 		}
 		return Result.error("no Login");
@@ -90,7 +92,11 @@ public class UserController {
 	@GetMapping("user/detial")
 	public Result<User> userDetial(HttpSession session) {
 		User user = (User) session.getAttribute("user");
+		 System.out.println("Session ID: " + session.getId());
+		    System.out.println("User: " + user);
+		System.out.println(user);
 		if(user!=null) { 
+		
 			return Result.success(user);
 			
 		}
@@ -362,5 +368,15 @@ public class UserController {
 
 	        return result.getData();
 	}
+	
+//    @GetMapping("user/{userId}")
+//    public Result<User> getUserWithFavoriteArticles(@PathVariable Integer userId) {
+//        User user = userService.getUserWithFavoriteArticles(userId);
+//        if (user != null) {
+//            return Result.success(user);
+//        } else {
+//            return Result.error("X");
+//        }
+//    }
 						
 }

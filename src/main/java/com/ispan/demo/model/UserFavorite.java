@@ -20,26 +20,26 @@ public class UserFavorite {
 //	@ManyToOne
 	@JoinColumn(name = "user_id")
 	@Column(name = "user_id")
-//	private User  userId;
 	private Integer  userId;
+//	private User  user;
 	
 //	@ManyToOne
 	@JoinColumn(name = "article_id")
 	@Column(name = "article_id")
-//	private Article articleId;
 	private Integer articleId;
+//	private Article article;
 	
 //	@ManyToOne
 	@JoinColumn(name = "restaurant_id")
 	@Column(name = "restaurant_id")
-//	private Restaurant restaurantId;
 	private Integer restaurantId;
+//	private Restaurant restaurant;
 	
 //	@ManyToOne
 	@JoinColumn(name = "food_id")
 	@Column(name = "food_id")
-//	private Food foodId;
 	private Integer foodId;
+//	private Food food;
 
 	public UserFavorite() {
 		super();
