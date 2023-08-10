@@ -114,6 +114,7 @@ public class UserController {
 		User user = (User) session.getAttribute("user");
 		    System.out.println("User: " + user);
 		if(user!=null) { 
+	
 		
 			return Result.success(user);
 			
