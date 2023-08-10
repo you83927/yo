@@ -3,6 +3,7 @@ package com.ispan.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,8 @@ import com.ispan.demo.service.FollowSrevice;
 import com.ispan.demo.service.UserFavoriteService;
 import com.ispan.demo.service.UserService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 
@@ -60,17 +63,33 @@ public class UserController {
 	public Result<String> loginUser(
 //			@RequestParam String loginName, @RequestParam String loginPwd,
 			@RequestBody  User login
-			,HttpSession httpSession) {
-		User user = userService.checkLogin(login.getUserName(), login.getPassWord());
-
-		if (user != null) {
+			,HttpSession httpSession
+			,HttpServletResponse response) {
+		
+		User user = userService.checkLogin(login.getUserName(), login.getPassWord());	
+		
+	    Cookie cookie = new Cookie("userCookie", login.getUserName());
+	    cookie.setMaxAge(3600); // 设置 Cookie 过期时间（单位：秒）
+	    cookie.setHttpOnly(true); // 设置 HttpOnly 属性，防止 JavaScript 访问 Cookie
+	    cookie.setSecure(true); // 设置 Secure 属性，仅在 HTTPS 连接中传输 Cookie
+	    cookie.setPath("/"); // 设置 Cookie 的作用路径，根路径下的所有请求都会带上该 Cookie
+	    
+	    if (user != null) {
 			user.setPassWord(null);
 			httpSession.setAttribute("user", user);
-			System.out.println(user);
-			
+			response.addCookie(cookie);
 			return Result.success("login success");
 		}
-		return Result.error("no Login");
+	    return Result.error("no Login");
+//
+//		if (user != null) {
+//			user.setPassWord(null);
+//			httpSession.setAttribute("user", user);
+//			System.out.println("login user:"+user);
+//			return Result.success("login success");
+//		}
+	    
+	    
 	}
 
 	// 登出
@@ -90,11 +109,10 @@ public class UserController {
 //		return Result.success(user);
 //	}
 	@GetMapping("user/detial")
-	public Result<User> userDetial(HttpSession session) {
+	public Result<User> userDetial(HttpSession session,@CookieValue("JSESSIONID") String JSESSIONID) {
+		System.out.println(JSESSIONID);
 		User user = (User) session.getAttribute("user");
-		 System.out.println("Session ID: " + session.getId());
 		    System.out.println("User: " + user);
-		System.out.println(user);
 		if(user!=null) { 
 		
 			return Result.success(user);
