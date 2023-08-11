@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ispan.demo.config.Result;
+import com.ispan.demo.model.Article;
 import com.ispan.demo.model.Follower;
+import com.ispan.demo.model.FoodType;
+import com.ispan.demo.model.RestaurantList;
 import com.ispan.demo.model.User;
 import com.ispan.demo.model.UserFavorite;
 import com.ispan.demo.service.FollowSrevice;
@@ -215,15 +218,21 @@ public class UserController {
 	}
 
 	// 查詢所有最愛文章
+//	@GetMapping("user/favorite/articles")
+//	public Result<List<Integer>> showUserFavoriteArticles(HttpSession session) {
+//		User user = (User) session.getAttribute("user");
+//		List<Integer> favoriteArticleIds = userFavoriteService.findArticleIdsByUserId(user.getId());
+//
+//		if (favoriteArticleIds.isEmpty()) {
+//			return Result.error("没有 favorite articles");
+//		}
+//
+//		return Result.success(favoriteArticleIds);
+//	}
 	@GetMapping("user/favorite/articles")
-	public Result<List<Integer>> showUserFavoriteArticles(HttpSession session) {
+	public Result<List<Article>> findFavoriteArticleByUserId(HttpSession session){
 		User user = (User) session.getAttribute("user");
-		List<Integer> favoriteArticleIds = userFavoriteService.findArticleIdsByUserId(user.getId());
-
-		if (favoriteArticleIds.isEmpty()) {
-			return Result.error("没有 favorite articles");
-		}
-
+		List<Article> favoriteArticleIds = userService.findFavoriteArticleByUserId(user.getId());
 		return Result.success(favoriteArticleIds);
 	}
 
@@ -245,15 +254,22 @@ public class UserController {
 	}
 
 	// 查詢所有最愛餐廳
+//	@GetMapping("user/favorite/restaurants")
+//	public Result<List<Integer>> showUserFavoriteRestaurants(HttpSession session) {
+//		User user = (User) session.getAttribute("user");
+//		List<Integer> favoriteRestaurants = userFavoriteService.findRestaurantIdsByUserId(user.getId());
+//
+//		if (favoriteRestaurants.isEmpty()) {
+//			return Result.error("没有 favorite restaurants");
+//		}
+//		return Result.success(favoriteRestaurants);
+//	}
+	
 	@GetMapping("user/favorite/restaurants")
-	public Result<List<Integer>> showUserFavoriteRestaurants(HttpSession session) {
+	public Result<List<RestaurantList>> findFavoriteRestaurantListByUserId(HttpSession session){
 		User user = (User) session.getAttribute("user");
-		List<Integer> favoriteRestaurants = userFavoriteService.findRestaurantIdsByUserId(user.getId());
-
-		if (favoriteRestaurants.isEmpty()) {
-			return Result.error("没有 favorite restaurants");
-		}
-		return Result.success(favoriteRestaurants);
+	List<RestaurantList> findFavoriteRestaurantListByUserId = userService.findFavoriteRestaurantListByUserId(user.getId());
+		return Result.success(findFavoriteRestaurantListByUserId);
 	}
 
 	// 以foodId查詢最愛食物
@@ -273,17 +289,24 @@ public class UserController {
 	}
 
 	// 查詢所有最愛食物
+//	@GetMapping("user/favorite/foods")
+//	public Result<List<Integer>> showUserFavoriteFoods(HttpSession session) {
+//		User user = (User) session.getAttribute("user");
+//		List<Integer> favoriteFoods = userFavoriteService.findFoodIdsByUserId(user.getId());
+//
+//		if (favoriteFoods.isEmpty()) {
+//			return Result.error("没有 favorite foods");
+//		}
+//		return Result.success(favoriteFoods);
+//	}
+//	
 	@GetMapping("user/favorite/foods")
-	public Result<List<Integer>> showUserFavoriteFoods(HttpSession session) {
+	public Result<List<FoodType>> findFavoriteFoodTypeByUserId(HttpSession session){
 		User user = (User) session.getAttribute("user");
-		List<Integer> favoriteFoods = userFavoriteService.findFoodIdsByUserId(user.getId());
-
-		if (favoriteFoods.isEmpty()) {
-			return Result.error("没有 favorite foods");
-		}
-		return Result.success(favoriteFoods);
+	List<FoodType> findFavoriteFoodTypeByUserId = userService.findFavoriteFoodTypeByUserId(user.getId());
+		return Result.success(findFavoriteFoodTypeByUserId);
 	}
-
+ 
 	// 新增最愛的文章
 	@PostMapping("user/favorite/insert/article")
 	public Result<UserFavorite> insertUserFavoriteArticle(@RequestBody UserFavorite userFavorite) {
@@ -397,5 +420,5 @@ public class UserController {
 //            return Result.error("X");
 //        }
 //    }
-						
+	
 }

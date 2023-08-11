@@ -30,7 +30,7 @@ public interface UserFavoriteRepository extends JpaRepository<UserFavorite, Inte
 	
 	boolean existsByRestaurantId(Integer restaurantId);
 	
-	boolean existsByFoodId(Integer foodId);
+	boolean existsByFoodId(String foodId);
 	
 	
 	@Query("SELECT uf.articleId FROM UserFavorite uf WHERE uf.userId = :userId AND uf.articleId IS NOT NULL")

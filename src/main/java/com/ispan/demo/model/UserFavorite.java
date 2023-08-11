@@ -37,8 +37,8 @@ public class UserFavorite {
 	
 //	@ManyToOne
 	@JoinColumn(name = "food_id")
-	@Column(name = "food_id")
-	private Integer foodId;
+	@Column(name = "food_id" , columnDefinition ="varchar(255)")
+	private String foodId;
 //	private Food food;
 
 	public UserFavorite() {
@@ -78,11 +78,11 @@ public class UserFavorite {
 		this.restaurantId = restaurantId;
 	}
 	
-	public Integer getFoodId() {
+	public String getFoodId() {
 		return foodId;
 	}
 
-	public void setFoodId(Integer foodId) {
+	public void setFoodId(String foodId) {
 		this.foodId = foodId;
 	}
 	
