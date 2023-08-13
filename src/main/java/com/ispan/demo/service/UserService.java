@@ -40,7 +40,8 @@ public class UserService {
 		return userRepository.save(user);
 			
 	}
-
+	
+	//透過id找user
 	public User findUserById(Integer id) {
 		Optional<User> optional = userRepository.findById(id);
 		if (optional.isPresent()) {
@@ -49,6 +50,7 @@ public class UserService {
 		return null;
 	}
 
+	//更新
 	public User updateUserById(User user) {
 		Optional<User> option = userRepository.findById(user.getId());
 		if (option.isEmpty()) {
@@ -63,10 +65,12 @@ public class UserService {
 		return getUser;
 	}
 
+	//刪除
 	public void deleteUserById(Integer id) {
 		userRepository.deleteById(id);
 	}
 
+	//檢查登入
 	public User checkLogin(String userName, String pwd) {
 		User user = userRepository.findByUserName(userName);
 
@@ -76,6 +80,7 @@ public class UserService {
 		return null;
 	}
 	
+	//檢查登出
 	public User checkLogout(String userName, String pwd) {
 		User user = userRepository.findByUserName(userName);
 
@@ -125,6 +130,7 @@ public class UserService {
 //	public User getUserWithFavoriteArticles(Integer userId) {
 //        return userRepository.findUserWithFavoriteArticles(userId);
 //    }
+	
 	public List<Article> findFavoriteArticleByUserId(Integer userId){
 		List<Article> list = userRepository.findFavoriteArticleByUserId(userId);
 		return list;
