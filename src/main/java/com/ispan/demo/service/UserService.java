@@ -92,17 +92,18 @@ public class UserService {
 	
 	
 	
-	public Result<String> uploadPhoto(Integer userId, MultipartFile file) {
+	public User uploadPhoto(Integer userId, MultipartFile file) {
         if (file.isEmpty()) {
-            return Result.error("上傳的照片為空");
+        	return null;
+//            return Result.error("上傳的照片為空");
         }
 
         try {
             // 根據 userId 查找使用者
             User user = userRepository.findById(userId).orElse(null);
-            if (user == null) {
-                return Result.error("找不到指定的使用者");
-            }
+//            if (user == null) {
+//                return "找不到指定的使用者";
+//            }
 
             // 檔案名稱
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -111,19 +112,20 @@ public class UserService {
             String fileType = file.getContentType();
 
             // 檔案大小限制（根據需求自行調整）
-            if (file.getSize() > 5 * 1024 * 1024) { // 5 MB
-                return Result.error("檔案大小超過限制");
-            }
+//            if (file.getSize() > 5 * 1024 * 1024) { // 5 MB
+//                return "檔案大小超過限制";
+//            }
 
             // 進行實際的儲存操作
             user.setPhoto(file.getBytes()); // 儲存照片內容至使用者物件
-            userRepository.save(user);
+            
 
-            return Result.success("照片上傳成功");
+            return userRepository.save(user);
 
         } catch (IOException e) {
             e.printStackTrace();
-            return Result.error("照片上傳失敗：" + e.getMessage());
+            return null;
+//            return "照片上傳失敗：" + e.getMessage();
         }
 	}
 	

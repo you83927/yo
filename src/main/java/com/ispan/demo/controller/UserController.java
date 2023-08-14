@@ -401,14 +401,18 @@ public class UserController {
 	}
 	
 	//照片上傳
-	@PostMapping("user/photo/{id}")
-	public String uploadUserPhoto(@PathVariable Integer id,@RequestParam("file") MultipartFile file){
-		 Result<String> result = userService.uploadPhoto(id, file);
-		 if(result.getCode()==0) {
-			 return result.getMsg();
+	@PostMapping("user/photo")
+	public Result<String> uploadUserPhoto(@RequestParam MultipartFile file,HttpSession session){
+		User user = (User)session.getAttribute("user");
+		if(user==null) {
+			return Result.error("找不到指定的使用者");
+		}
+		User uploadPhoto = userService.uploadPhoto(user.getId(), file);
+		 if(uploadPhoto==null) {
+			 return Result.error("上傳失敗");
 		 }
-
-	        return result.getData();
+	
+		 return Result.success("照片上傳成功");
 	}
 	
 //    @GetMapping("user/{userId}")
