@@ -41,7 +41,7 @@ public class User {
 	private String nickName;
 
 	@Lob
-	@Column(name = "photo", columnDefinition = "varbinary(max)")
+	@Column(name = "photo", columnDefinition = "image")
 	private byte[] photo;
 
 	@Column(name = "gender", columnDefinition = "smallint")
