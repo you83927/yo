@@ -60,8 +60,8 @@ public class UserService {
 		 User getUser = option.get();
 		 
 		 
-		 
-//		NullCheckUtils.copyPropertiesNonNull(user, getUser);
+		
+		NullCheckUtils.copyPropertiesNonNull(user, getUser);
 		 
 		 userRepository.save(getUser);
 		return getUser;
