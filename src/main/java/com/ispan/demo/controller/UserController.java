@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ispan.demo.config.Result;
@@ -66,21 +67,21 @@ public class UserController {
 	public Result<String> loginUser(
 //			@RequestParam String loginName, @RequestParam String loginPwd,
 			@RequestBody  User login
-			,HttpSession httpSession
+			,HttpSession session
 			,HttpServletResponse response) {
 		
 		User user = userService.checkLogin(login.getUserName(), login.getPassWord());	
 		
-	    Cookie cookie = new Cookie("userCookie", login.getUserName());
-	    cookie.setMaxAge(3600); // 设置 Cookie 过期时间（单位：秒）
-	    cookie.setHttpOnly(true); // 设置 HttpOnly 属性，防止 JavaScript 访问 Cookie
-	    cookie.setSecure(true); // 设置 Secure 属性，仅在 HTTPS 连接中传输 Cookie
-	    cookie.setPath("/"); // 设置 Cookie 的作用路径，根路径下的所有请求都会带上该 Cookie
+//	    Cookie cookie = new Cookie("userCookie", login.getUserName());
+//	    cookie.setMaxAge(3600); // 设置 Cookie 过期时间（单位：秒）
+//	    cookie.setHttpOnly(true); // 设置 HttpOnly 属性，防止 JavaScript 访问 Cookie
+//	    cookie.setSecure(true); // 设置 Secure 属性，仅在 HTTPS 连接中传输 Cookie
+//	    cookie.setPath("/"); // 设置 Cookie 的作用路径，根路径下的所有请求都会带上该 Cookie
 	    
 	    if (user != null) {
 			user.setPassWord(null);
-			httpSession.setAttribute("user", user);
-			response.addCookie(cookie);
+			session.setAttribute("user", user);
+//			response.addCookie(cookie);
 			return Result.success("login success");
 		}
 	    return Result.error("no Login");
@@ -97,8 +98,16 @@ public class UserController {
 
 	// 登出
 	@PostMapping("user/logout")
-	public Result<String> logoutUser(HttpSession httpSession) {
-		httpSession.invalidate();
+	public Result<String> logoutUser(HttpSession session,SessionStatus sessionStatus) {
+		User user = (User) session.getAttribute("user");
+		System.out.println(user+"  123");
+		if(user!=null) {
+			session.invalidate();
+//			session.removeAttribute("user");
+//			sessionStatus.setComplete();
+			System.out.println(user);
+		}
+//		session.invalidate();
 
 		return Result.success("logout ok");
 
@@ -115,6 +124,7 @@ public class UserController {
 	public Result<User> userDetial(HttpSession session,@CookieValue("JSESSIONID") String JSESSIONID) {
 		System.out.println(JSESSIONID);
 		User user = (User) session.getAttribute("user");
+		System.out.println(user+"++++++++++++++++");
 		    System.out.println("User: " + user);
 		if(user!=null) { 
 	
