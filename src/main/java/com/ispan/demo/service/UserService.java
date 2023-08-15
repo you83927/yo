@@ -60,9 +60,12 @@ public class UserService {
 		 User getUser = option.get();
 		 
 		 
-		
 		NullCheckUtils.copyPropertiesNonNull(user, getUser);
-		 
+		System.out.println(getUser.getPhoto().length);
+		if(getUser.getPhoto() != null && getUser.getPhoto().length==0) {
+			getUser.setPhoto(null);
+		}
+		 System.out.println(getUser + "111111111111111111111111111");
 		 userRepository.save(getUser);
 		return getUser;
 	}
