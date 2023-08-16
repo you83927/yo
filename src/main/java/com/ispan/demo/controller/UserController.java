@@ -158,7 +158,6 @@ public class UserController {
 		User updateUserById = userService.updateUserById(newUser);
 
 		if (updateUserById == null) {
-		
 			return Result.error("更新失敗");
 		}
 		session.setAttribute("user", newUser);
@@ -401,29 +400,35 @@ public class UserController {
 	
 	//追蹤列表
 	@GetMapping("user/follow")
-	public Result<List<Follower>> findFollow(HttpSession session){
+	public Result<List<User>> findFollow(HttpSession session){
 		User user = (User)session.getAttribute("user");
-		List<Follower> list = followSrevice.findByUserId(user.getId());
+		List<User> list = userService.findFollowingUsersByUserId(user.getId());
 		if(list==null) {
 			return Result.error("沒有追蹤");
 		}
+		
 		return Result.success(list);
 	}
 	
-	//照片上傳
-	@PostMapping("user/photo")
-	public Result<String> uploadUserPhoto(@RequestParam MultipartFile file,HttpSession session){
-		User user = (User)session.getAttribute("user");
-		if(user==null) {
-			return Result.error("找不到指定的使用者");
-		}
-		User uploadPhoto = userService.uploadPhoto(user.getId(), file);
-		 if(uploadPhoto==null) {
-			 return Result.error("上傳失敗");
-		 }
 	
-		 return Result.success("照片上傳成功");
-	}
+	
+	
+	
+	
+	//照片上傳
+//	@PostMapping("user/photo")
+//	public Result<String> uploadUserPhoto(@RequestParam MultipartFile file,HttpSession session){
+//		User user = (User)session.getAttribute("user");
+//		if(user==null) {
+//			return Result.error("找不到指定的使用者");
+//		}
+//		User uploadPhoto = userService.uploadPhoto(user.getId(), file);
+//		 if(uploadPhoto==null) {
+//			 return Result.error("上傳失敗");
+//		 }
+//	
+//		 return Result.success("照片上傳成功");
+//	}
 	
 //    @GetMapping("user/{userId}")
 //    public Result<User> getUserWithFavoriteArticles(@PathVariable Integer userId) {

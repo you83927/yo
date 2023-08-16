@@ -1,6 +1,7 @@
 package com.ispan.demo.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,7 +66,22 @@ public class UserService {
 		if(getUser.getPhoto() != null && getUser.getPhoto().length==0) {
 			getUser.setPhoto(null);
 		}
-		 System.out.println(getUser + "111111111111111111111111111");
+		
+		if(getUser.getNickName() != null && getUser.getNickName()=="") {
+			getUser.setNickName(null);
+		}
+		
+		if(getUser.getEmail() != null && getUser.getEmail()=="") {
+			getUser.setEmail(null);
+		}
+		
+		if(getUser.getGender() != null && getUser.getGender()==0) {
+			getUser.setGender(null);
+		}
+		if(getUser.getBirthday() != null && getUser.getBirthday().isEqual(LocalDate.of(0001, 01, 01))) {
+			getUser.setBirthday(null);
+		}
+		
 		 userRepository.save(getUser);
 		return getUser;
 	}
@@ -151,6 +167,14 @@ public class UserService {
 	
 	public List<FoodType> findFavoriteFoodTypeByUserId(Integer userId){
 		List<FoodType> list = userRepository.findFavoriteFoodTypeByUserId(userId);
+		return list;
+	}
+	
+	public List<User> findFollowingUsersByUserId(Integer userId){
+		List<User> list = userRepository.findFollowingUsersByUserId(userId);
+		for(User user:list) {
+			System.out.println(user.getPhoto());
+		}
 		return list;
 	}
 	
