@@ -48,6 +48,12 @@ public class FollowId implements Serializable {
 	    public int hashCode() {
 	        return Objects.hash(userId, following);
 	    }
+
+		@Override
+		public String toString() {
+			return "FollowId [userId=" + userId + ", following=" + following + "]";
+		}
 	
+	    
 	
 }

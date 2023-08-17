@@ -29,6 +29,11 @@ public class Follower {
 		return isFav;
 	}
 
+	@Override
+	public String toString() {
+		return "Follower [id=" + id + ", isFav=" + isFav + "]";
+	}
+
 	public void setIsFav(Boolean isFav) {
 		this.isFav = isFav;
 	}

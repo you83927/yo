@@ -89,6 +89,7 @@ public class UserService {
 	//刪除
 	public void deleteUserById(Integer id) {
 		userRepository.deleteById(id);
+		
 	}
 
 	//檢查登入

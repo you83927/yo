@@ -124,6 +124,7 @@ public class UserController {
 	public Result<User> userDetial(HttpSession session,@CookieValue("JSESSIONID") String JSESSIONID) {
 		System.out.println(JSESSIONID);
 		User user = (User) session.getAttribute("user");
+		
 		System.out.println(user+"++++++++++++++++");
 		    System.out.println("User: " + user);
 		if(user!=null) { 
@@ -165,18 +166,6 @@ public class UserController {
 
 	}
 	
-
-	// 刪除使用者
-	@DeleteMapping("user/delete")
-	public Result<String> deleteUserById(@RequestParam Integer id) {
-		User user = userService.findUserById(id);
-		if (user == null) {
-			return Result.error("沒有資料");
-
-		}
-		userService.deleteUserById(id);
-		return Result.success("刪除成功");
-	}
 
 	// 使用者禁用
 	@PostMapping("user/ban")
@@ -410,9 +399,40 @@ public class UserController {
 		return Result.success(list);
 	}
 	
+	// 刪除追蹤
+	@DeleteMapping("user/deleteFollower/{id}")
+	public Result<String> deleteFollowerByUserId(@PathVariable Integer id) {
+		List<Follower> follower = followSrevice.findByFollowing(id);
+		if (follower == null) {
+			return Result.error("沒有資料");
+		}
+//		followSrevice.deleteFollowerByFollowing(id);
+		System.out.println(id);
+		return Result.success("刪除成功");
+	}
 	
+	//新增追蹤
+	@PostMapping("user/insertFollower")
+	public Result<String> insertFollower(HttpSession session,@RequestBody Follower following){
+		User user = (User)session.getAttribute("user");
+		Follower checkIfFollowingExists = followSrevice.checkIfFollowingExists (user.getId(),following);
+		if(checkIfFollowingExists==null) {
+			return Result.error("已追蹤");
+		}
+		return Result.success("追蹤成功");
+	}
 	
-	
+	// 刪除使用者
+//	@DeleteMapping("user/delete/{id}")
+//	public Result<String> deleteUserById(@PathVariable Integer id) {
+//		User user = userService.findUserById(id);
+//		if (user == null) {
+//			return Result.error("沒有資料");
+//		}
+//		userService.deleteUserById(id);
+//		return Result.success("刪除成功");
+//	}
+//	
 	
 	
 	//照片上傳
