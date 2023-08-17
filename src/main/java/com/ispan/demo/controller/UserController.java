@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ispan.demo.config.Result;
 import com.ispan.demo.model.Article;
+import com.ispan.demo.model.FollowId;
 import com.ispan.demo.model.Follower;
 import com.ispan.demo.model.FoodType;
 import com.ispan.demo.model.RestaurantList;
@@ -406,20 +407,30 @@ public class UserController {
 		if (follower == null) {
 			return Result.error("沒有資料");
 		}
-//		followSrevice.deleteFollowerByFollowing(id);
+		followSrevice.deleteFollowerByFollowing(id);
 		System.out.println(id);
 		return Result.success("刪除成功");
 	}
 	
 	//新增追蹤
 	@PostMapping("user/insertFollower")
-	public Result<String> insertFollower(HttpSession session,@RequestBody Follower following){
+	public Result<String> insertFollower(HttpSession session,@RequestBody Follower follower){
 		User user = (User)session.getAttribute("user");
-		Follower checkIfFollowingExists = followSrevice.checkIfFollowingExists (user.getId(),following);
+		
+//		 FollowId id = follower.getId();
+		 follower.getId().setUserId(user.getId());
+//		System.out.println("111111111"+id);
+//		if(followId !=null) {
+			
+			
+//			System.out.println("2222222222222"+followId);
+		Follower checkIfFollowingExists = followSrevice.checkIfFollowingExists (user.getId(),follower);
 		if(checkIfFollowingExists==null) {
 			return Result.error("已追蹤");
 		}
 		return Result.success("追蹤成功");
+//		}
+//		return Result.error("追蹤失敗");
 	}
 	
 	// 刪除使用者
