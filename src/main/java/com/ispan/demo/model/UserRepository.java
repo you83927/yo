@@ -10,6 +10,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 	User findByUserName(String username);
 	
+	@Query("select u from User u where userName like '%:username%'")
+	List<User> findByUserNames(String username);
+	
 	boolean existsByUserName(String username);
 	
 	byte[] findPhotoById(Integer id); 
@@ -32,6 +35,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 //	 select * from [user]  INNER JOIN Follower  ON [user].id = follower.following WHERE follower.user_id = 1
 	@Query("SELECT u FROM User u INNER JOIN Follower f ON u.id = f.id.following WHERE f.id.userId = :userId")
     List<User> findFollowingUsersByUserId(Integer userId);
+	
+	@Query("SELECT u FROM User u INNER JOIN Follower f ON u.id = f.id.following WHERE u.userName like %:username%")
+    List<User> findFollowingUsersByUserName(String username);
 
 	
 }

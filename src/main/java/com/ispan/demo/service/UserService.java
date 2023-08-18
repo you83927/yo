@@ -42,6 +42,15 @@ public class UserService {
 			
 	}
 	
+	//找所有user
+		public List<User> findAllUser() {
+			List<User> list = userRepository.findAll();
+			if (list.isEmpty()) {
+				return null;
+			}
+			return list;
+		}
+	
 	//透過id找user
 	public User findUserById(Integer id) {
 		Optional<User> optional = userRepository.findById(id);
@@ -50,6 +59,25 @@ public class UserService {
 		}
 		return null;
 	}
+	
+	//透過userName找user
+	public List<User> findUserByUserName(String userName) {
+		 List<User> list = userRepository.findByUserNames(userName);
+		if (list.isEmpty()) {
+			return null;
+		}
+		return list;
+	}
+	
+	//在follower頁面透過userName找user
+	public List<User> findFollowingUsersByUserName(String userName) {
+		 List<User> list = userRepository.findFollowingUsersByUserName(userName);
+		if (list.isEmpty()) {
+			return null;
+		}
+		return list;
+	}
+	
 
 	//更新
 	public User updateUserById(User user) {

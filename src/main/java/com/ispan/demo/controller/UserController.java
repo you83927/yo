@@ -121,6 +121,8 @@ public class UserController {
 //
 //		return Result.success(user);
 //	}
+	
+	// 基本資料
 	@GetMapping("user/detial")
 	public Result<User> userDetial(HttpSession session,@CookieValue("JSESSIONID") String JSESSIONID) {
 		System.out.println(JSESSIONID);
@@ -186,6 +188,8 @@ public class UserController {
 		}
 
 	}
+	
+//--------------------------------	最愛頁面  ---------------------------------------------------------------------
 
 	// 最愛列表
 	@GetMapping("user/favorite")
@@ -388,6 +392,8 @@ public class UserController {
 		return Result.success("刪除成功");
 	}
 	
+//------------------------------------- Follower頁面 ------------------------------------------------------	
+	
 	//追蹤列表
 	@GetMapping("user/follow")
 	public Result<List<User>> findFollow(HttpSession session){
@@ -416,13 +422,10 @@ public class UserController {
 	@PostMapping("user/insertFollower")
 	public Result<String> insertFollower(HttpSession session,@RequestBody Follower follower){
 		User user = (User)session.getAttribute("user");
-		
 //		 FollowId id = follower.getId();
 		 follower.getId().setUserId(user.getId());
 //		System.out.println("111111111"+id);
 //		if(followId !=null) {
-			
-			
 //			System.out.println("2222222222222"+followId);
 		Follower checkIfFollowingExists = followSrevice.checkIfFollowingExists (user.getId(),follower);
 		if(checkIfFollowingExists==null) {
@@ -432,6 +435,49 @@ public class UserController {
 //		}
 //		return Result.error("追蹤失敗");
 	}
+	
+	//以id搜尋其他使用者
+	@PostMapping("user/findOtherUsersById/{id}")
+	public Result<User> findOtherUsers(@PathVariable Integer id){
+		User user = userService.findUserById(id);
+		
+			return Result.success(user);
+	}
+	
+	//以userName搜尋其他使用者
+	@GetMapping("user/findOtherUsersByUsername")
+	public Result<List<User>> findOtherUsersByUserName(@RequestParam String userName){
+		List<User> list = userService.findUserByUserName(userName);
+		
+		
+			return Result.success(list); 
+	}
+	
+	//在follower頁面以userName搜尋其他使用者
+	@GetMapping("user/findOtherUsersInFollowerPage")
+	public Result<List<User>> findFollowingUsersByUserName(@RequestParam String userName){
+		List<User> list = userService.findFollowingUsersByUserName(userName);
+		
+		
+			return Result.success(list); 
+	}
+	
+	//找所有使用者
+	@GetMapping("user/findAllUser")
+	public Result<List<User>> findAllUser(){
+		List<User> list = userService.findAllUser();
+			return Result.success(list); 
+	}
+	
+	
+	
+//	public Result<User> userDetial(@PathVariable Integer id) {
+//	User user = userService.findUserById(id);
+//
+//	return Result.success(user);
+//}
+
+	
 	
 	// 刪除使用者
 //	@DeleteMapping("user/delete/{id}")
