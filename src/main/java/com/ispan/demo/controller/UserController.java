@@ -2,7 +2,9 @@ package com.ispan.demo.controller;
 
 import java.util.List;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -443,13 +445,23 @@ public class UserController {
 		
 			return Result.success(user);
 	}
+	@GetMapping("user/findFollowingUsersByFollowing/{following}")
+	public Result<User> findFollowingUsersByFollowing(@PathVariable Integer following){
+		User user = userService.findFollowingUsersByFollowing(following);
+		if(user==null) {
+			return null;
+		}
+		return Result.success(user); 
+	}
 	
 	//以userName搜尋其他使用者
 	@GetMapping("user/findOtherUsersByUsername")
 	public Result<List<User>> findOtherUsersByUserName(@RequestParam String userName){
 		List<User> list = userService.findUserByUserName(userName);
-		
-		
+		if(list==null) {
+			return null;
+		}
+//		
 			return Result.success(list); 
 	}
 	
@@ -457,16 +469,22 @@ public class UserController {
 	@GetMapping("user/findOtherUsersInFollowerPage")
 	public Result<List<User>> findFollowingUsersByUserName(@RequestParam String userName){
 		List<User> list = userService.findFollowingUsersByUserName(userName);
-		
-		
+			if(list==null) {
+				System.out.println(list);
+				return null;
+			}
 			return Result.success(list); 
 	}
 	
+	
 	//找所有使用者
-	@GetMapping("user/findAllUser")
-	public Result<List<User>> findAllUser(){
-		List<User> list = userService.findAllUser();
-			return Result.success(list); 
+	@PostMapping("user/findAllUser")
+	public Result<Page<User>> findAllUser(
+			@RequestParam int page,
+	        @RequestParam int size){
+		Page<User> usersByPage = userService.getUsersByPage(page, size);
+//		List<User> list = userService.findAllUser();
+			return Result.success(usersByPage); 
 	}
 	
 	

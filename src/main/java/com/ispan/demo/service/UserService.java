@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ispan.demo.config.NullCheckUtils;
-import com.ispan.demo.config.Result;
 import com.ispan.demo.model.Article;
 import com.ispan.demo.model.FoodType;
 import com.ispan.demo.model.RestaurantList;
@@ -78,10 +80,19 @@ public class UserService {
 		return list;
 	}
 	
+	public User findFollowingUsersByFollowing(Integer following) {
+		User user = userRepository.findFollowingUsersByFollowing(following);
+		if (user==null) {
+			return null;
+		}
+		return user;
+	}
+	
 
 	//更新
 	public User updateUserById(User user) {
 		Optional<User> option = userRepository.findById(user.getId());
+		
 		if (option.isEmpty()) {
 			
 			return null;
@@ -206,5 +217,13 @@ public class UserService {
 		}
 		return list;
 	}
+	
+	   public Page<User> getUsersByPage(int pageNumber, int pageSize) {
+	        // 創建分頁請求，指定頁數和每頁顯示的資料數量
+	        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("userName").ascending());
+
+	        // 進行分頁查詢
+	        return userRepository.findAll(pageRequest);
+	    }
 	
 }
