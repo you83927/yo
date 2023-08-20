@@ -127,8 +127,13 @@ public class UserController {
 	// 基本資料
 	@GetMapping("user/detial")
 	public Result<User> userDetial(HttpSession session,@CookieValue("JSESSIONID") String JSESSIONID) {
-		System.out.println(JSESSIONID);
+		System.out.println("123"+JSESSIONID);
+		System.out.println("456"+session.getAttribute("user"));
+		if(session.getAttribute("user")==null) {
+			return null;
+		}
 		User user = (User) session.getAttribute("user");
+		
 		
 		System.out.println(user+"++++++++++++++++");
 		    System.out.println("User: " + user);
@@ -398,9 +403,12 @@ public class UserController {
 	
 	//追蹤列表
 	@GetMapping("user/follow")
-	public Result<List<User>> findFollow(HttpSession session){
+	public Result<Page<User>> findFollow(
+			HttpSession session,
+			@RequestParam int page,
+	        @RequestParam int size){
 		User user = (User)session.getAttribute("user");
-		List<User> list = userService.findFollowingUsersByUserId(user.getId());
+		Page<User> list = userService.findFollowingUsersByUserId(user.getId(),page, size);
 		if(list==null) {
 			return Result.error("沒有追蹤");
 		}
@@ -456,11 +464,14 @@ public class UserController {
 	
 	//以userName搜尋其他使用者
 	@GetMapping("user/findOtherUsersByUsername")
-	public Result<List<User>> findOtherUsersByUserName(@RequestParam String userName){
-		List<User> list = userService.findUserByUserName(userName);
-		if(list==null) {
-			return null;
-		}
+	public Result<Page<User>> findOtherUsersByUserName(
+			@RequestParam String userName,
+			@RequestParam int page,
+	        @RequestParam int size){
+		Page<User> list = userService.findUserByUserNamePage(userName,page, size);
+//		if(list==null) {
+//			return null;
+//		}
 //		
 			return Result.success(list); 
 	}

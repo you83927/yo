@@ -2,10 +2,10 @@ package com.ispan.demo.model;
 
 import java.util.List;
 
-import org.json.JSONObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
@@ -13,6 +13,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	
 	@Query("select u from User u where userName like %:username%")
 	List<User> findByUserNames(String username);
+	
+	@Query("select u from User u where userName like %:username%")
+	Page<User> findByUserNamesPage(String username,Pageable pageable);
 	
 	boolean existsByUserName(String username);
 	
@@ -35,12 +38,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	
 //	 select * from [user]  INNER JOIN Follower  ON [user].id = follower.following WHERE follower.user_id = 1
 	@Query("SELECT u FROM User u INNER JOIN Follower f ON u.id = f.id.following WHERE f.id.userId = :userId")
-    List<User> findFollowingUsersByUserId(Integer userId);
+	Page<User> findFollowingUsersByUserId(Integer userId,Pageable pageable);
 	
 	@Query("SELECT u FROM User u INNER JOIN Follower f ON u.id = f.id.following WHERE f.id.following = :following")
 	User findFollowingUsersByFollowing(Integer following);
 	
-	@Query("SELECT u FROM User u INNER JOIN Follower f ON u.id = f.id.following WHERE u.userName like %:username")
+	@Query("SELECT u FROM User u INNER JOIN Follower f ON u.id = f.id.following WHERE u.userName like %:username%")
     List<User> findFollowingUsersByUserName(String username);
 
 

@@ -71,6 +71,14 @@ public class UserService {
 		return list;
 	}
 	
+	//透過userName找user 分頁查詢
+	public Page<User> findUserByUserNamePage(String userName,int pageNumber, int pageSize) {
+		 PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("userName").ascending());
+		Page<User> userNamesPage = userRepository.findByUserNamesPage(userName,pageRequest);
+
+		return userNamesPage;
+	}
+	
 	//在follower頁面透過userName找user
 	public List<User> findFollowingUsersByUserName(String userName) {
 		 List<User> list = userRepository.findFollowingUsersByUserName(userName);
@@ -210,8 +218,9 @@ public class UserService {
 		return list;
 	}
 	
-	public List<User> findFollowingUsersByUserId(Integer userId){
-		List<User> list = userRepository.findFollowingUsersByUserId(userId);
+	public Page<User> findFollowingUsersByUserId(Integer userId,int pageNumber, int pageSize){
+		PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("userName").ascending());
+		Page<User> list = userRepository.findFollowingUsersByUserId(userId,pageRequest);
 		for(User user:list) {
 			System.out.println(user.getPhoto());
 		}
@@ -221,7 +230,7 @@ public class UserService {
 	   public Page<User> getUsersByPage(int pageNumber, int pageSize) {
 	        // 創建分頁請求，指定頁數和每頁顯示的資料數量
 	        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("userName").ascending());
-
+	      
 	        // 進行分頁查詢
 	        return userRepository.findAll(pageRequest);
 	    }
