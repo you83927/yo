@@ -72,9 +72,9 @@ public class UserController {
 //			,HttpServletResponse response
 			) {
 		
-		User user = userService.checkLogin(login.getUserName(), login.getPassWord());	
+		User user = userService.checkLogin(login.getUsername(), login.getPassword());	
 		if (user != null) {
-			user.setPassWord(null);
+			user.setPassword(null);
 			session.setAttribute("user", user);
 //			response.addCookie(cookie);
 			return Result.success("login success");
@@ -284,7 +284,7 @@ public class UserController {
 
 	// 以foodId查詢最愛食物
 	@GetMapping("user/favorite/food")
-	public Result<List<UserFavorite>> showUserFavoriteFood(@RequestParam Integer userId, @RequestParam Integer foodId) {
+	public Result<List<UserFavorite>> showUserFavoriteFood(@RequestParam Integer userId, @RequestParam String foodId) {
 		List<UserFavorite> favorite = userFavoriteService.findByUserId(userId);
 		if (favorite.isEmpty()) {
 			return Result.error("沒有 favorite food");
@@ -385,7 +385,7 @@ public class UserController {
 	// 刪除最愛的食物
 	@Transactional
 	@DeleteMapping("user/favorite/delete/food")
-	public Result<String> deleteUserFavorite(@RequestParam Integer userId, @RequestParam Integer foodId) {
+	public Result<String> deleteUserFavorite(@RequestParam Integer userId, @RequestParam String foodId) {
 		List<UserFavorite> findByUserId = userFavoriteService.findByUserId(userId);
 		if (findByUserId.isEmpty()) {
 			return Result.error("沒有資料");

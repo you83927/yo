@@ -2,7 +2,6 @@ package com.ispan.demo.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -13,14 +12,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(name = "[user]")
-//@Data
+@Data
 public class User {
 
 	@Id
@@ -29,16 +28,16 @@ public class User {
 	private Integer id;
 
 	@Column(name = "username", columnDefinition = "nvarchar(15)", unique = true)
-	private String userName;
+	private String username;
 
 	@Column(name = "password", columnDefinition = "nvarchar(15)")
-	private String passWord;
+	private String password;
 
 	@Column(name = "[identity]")
 	private Integer identity;
 
 	@Column(name = "nickname", columnDefinition = "nvarchar(25)")
-	private String nickName;
+	private String nickname;
 
 	@Lob
 	@Column(name = "photo", columnDefinition = "image")
@@ -80,7 +79,7 @@ public class User {
 			createdDate = LocalDateTime.now();
 		}
 		modifiedDate = createdDate;
-		modifiedBy = getUserName();
+		modifiedBy = getUsername();
 
 //		modifiedBy = getCurrentUsername();
 	}
@@ -99,130 +98,7 @@ public class User {
 //		return authentication.getName();
 //	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getPassWord() {
-		return passWord;
-	}
-
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
-	}
-
-	public Integer getIdentity() {
-		return identity;
-	}
-
-	public void setIdentity(Integer identity) {
-		this.identity = identity;
-	}
-
-	public String getNickName() {
-		return nickName;
-	}
-
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
-	}
-
-	public byte[] getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(byte[] photo) {
-		this.photo = photo;
-	}
-
-	public Integer getGender() {
-		return gender;
-	}
-
-	public void setGender(Integer gender) {
-		this.gender = gender;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public LocalDate getBirthday() {
-		return birthday;
-	}
-
-	public void setBirthday(LocalDate birthday) {
-		this.birthday = birthday;
-	}
-
-	public Boolean getStatus() {
-		return status;
-	}
-
-	public void setStatus(Boolean status) {
-		this.status = status;
-	}
-
-	public Integer getViolateCount() {
-		return violateCount;
-	}
-
-	public void setViolateCount(Integer violateCount) {
-		this.violateCount = violateCount;
-	}
-
-	public LocalDateTime getModifiedDate() {
-		return modifiedDate;
-	}
-
-	public void setModifiedDate(LocalDateTime modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
-
-	public LocalDateTime getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(LocalDateTime createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public String getModifiedBy() {
-		return modifiedBy;
-	}
-
-	public void setModifiedBy(String modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
-
-	public User() {
-		super();
-	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", userName=" + userName + ", passWord=" + passWord + ", identity=" + identity
-				+ ", nickName=" + nickName + ", photo=" + Arrays.toString(photo) + ", gender=" + gender + ", email="
-				+ email + ", birthday=" + birthday + ", status=" + status + ", violateCount=" + violateCount
-				+ ", modifiedDate=" + modifiedDate + ", createdDate=" + createdDate + ", modifiedBy=" + modifiedBy
-				+ "]";
-	}
+	
 
 //	@OneToMany(cascade =CascadeType.ALL,mappedBy = "userId")
 //	private Integer userFav;

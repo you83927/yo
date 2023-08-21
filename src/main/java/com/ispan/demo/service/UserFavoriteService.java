@@ -54,7 +54,7 @@ public class UserFavoriteService {
 	}
 
 	// 以foodId搜尋
-	public List<UserFavorite> findByFoodId(Integer foodId) {
+	public List<UserFavorite> findByFoodId(String foodId) {
 		List<UserFavorite> userFavorite = userFavoriteRepository.findByFoodId(foodId);
 		if (userFavorite != null) {
 			return userFavorite;
@@ -91,7 +91,7 @@ public class UserFavoriteService {
 		userFavoriteRepository.deleteByRestaurantId(restaurantId);
 	}
 	// 以foodId刪除
-	public void deleteUserByFoodId(Integer foodId) {
+	public void deleteUserByFoodId(String foodId) {
 		userFavoriteRepository.deleteByFoodId(foodId);
 	}
 	
@@ -106,7 +106,7 @@ public class UserFavoriteService {
 	}
 
 	//以foodId搜尋not null的值
-	public List<Integer> findFoodIdsByUserId(Integer userId) {
+	public List<String> findFoodIdsByUserId(Integer userId) {
 		return userFavoriteRepository.findFoodIdsByUserId(userId);
 	}
 

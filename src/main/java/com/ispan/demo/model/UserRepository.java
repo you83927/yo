@@ -9,15 +9,15 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-	User findByUserName(String username);
+	User findByUsername(String username);
 	
-	@Query("select u from User u where userName like %:username%")
+	@Query("select u from User u where username like %:username%")
 	List<User> findByUserNames(String username);
 	
-	@Query("select u from User u where userName like %:username%")
+	@Query("select u from User u where username like %:username%")
 	Page<User> findByUserNamesPage(String username,Pageable pageable);
 	
-	boolean existsByUserName(String username);
+	boolean existsByUsername(String username);
 	
 	byte[] findPhotoById(Integer id);  
 	
@@ -47,7 +47,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query("SELECT u FROM User u INNER JOIN Follower f ON u.id = f.id.following WHERE f.id.following = :following")
 	User findFollowingUsersByFollowing(Integer following);
 	
-	@Query("SELECT u FROM User u INNER JOIN Follower f ON u.id = f.id.following WHERE u.userName like %:username%")
+	@Query("SELECT u FROM User u INNER JOIN Follower f ON u.id = f.id.following WHERE u.username like %:username%")
     List<User> findFollowingUsersByUserName(String username);
 
 

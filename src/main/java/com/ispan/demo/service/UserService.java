@@ -38,7 +38,7 @@ public class UserService {
 	
 	// 新增
 	public User insertUser(User user) {
-		boolean existsByUserName = userRepository.existsByUserName(user.getUserName());
+		boolean existsByUserName = userRepository.existsByUsername(user.getUsername());
 		if(existsByUserName) {
 			return null;
 		}
@@ -75,7 +75,7 @@ public class UserService {
 	
 	//透過userName找user 分頁查詢
 	public Page<User> findUserByUserNamePage(String userName,int pageNumber, int pageSize) {
-		 PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("userName").ascending());
+		 PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("username").ascending());
 		Page<User> userNamesPage = userRepository.findByUserNamesPage(userName,pageRequest);
 
 		return userNamesPage;
@@ -116,8 +116,8 @@ public class UserService {
 			getUser.setPhoto(null);
 		}
 		
-		if(getUser.getNickName() != null && getUser.getNickName()=="") {
-			getUser.setNickName(null);
+		if(getUser.getNickname() != null && getUser.getNickname()=="") {
+			getUser.setNickname(null);
 		}
 		
 		if(getUser.getEmail() != null && getUser.getEmail()=="") {
@@ -143,9 +143,9 @@ public class UserService {
 
 	//檢查登入
 	public User checkLogin(String userName, String pwd) {
-		User user = userRepository.findByUserName(userName);
+		User user = userRepository.findByUsername(userName);
 
-		if (user!=null &&user.getUserName().equals(userName) && user.getPassWord().equals(pwd)) {
+		if (user!=null &&user.getUsername().equals(userName) && user.getPassword().equals(pwd)) {
 			return user;
 		}
 		return null;
@@ -153,9 +153,9 @@ public class UserService {
 	
 	//檢查登出
 	public User checkLogout(String userName, String pwd) {
-		User user = userRepository.findByUserName(userName);
+		User user = userRepository.findByUsername(userName);
 
-		if (user!=null &&user.getUserName().equals(userName) && user.getPassWord().equals(pwd)) {
+		if (user!=null &&user.getUsername().equals(userName) && user.getPassword().equals(pwd)) {
 			return null;
 		}
 		return user;
@@ -221,7 +221,7 @@ public class UserService {
 	}
 	
 	public Page<User> findFollowingUsersByUserId(Integer userId,int pageNumber, int pageSize){
-		PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("userName").ascending());
+		PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("username").ascending());
 		Page<User> list = userRepository.findFollowingUsersByUserId(userId,pageRequest);
 		for(User user:list) {
 			System.out.println(user.getPhoto());
@@ -231,7 +231,7 @@ public class UserService {
 	
 	   public Page<User> getUsersByPage(int pageNumber, int pageSize) {
 	        // 創建分頁請求，指定頁數和每頁顯示的資料數量
-	        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("userName").ascending());
+	        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("username").ascending());
 	      
 	        // 進行分頁查詢
 	        return userRepository.findAll(pageRequest);

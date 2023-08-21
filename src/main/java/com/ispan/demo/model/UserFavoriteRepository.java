@@ -14,14 +14,14 @@ public interface UserFavoriteRepository extends JpaRepository<UserFavorite, Inte
 	
 	List<UserFavorite> findByRestaurantId(Integer restaurantId);
 	
-	List<UserFavorite> findByFoodId(Integer foodId);
+	List<UserFavorite> findByFoodId(String foodId);
 	
 	
 	void deleteByArticleId(Integer articleId);
 
 	void deleteByRestaurantId(Integer restaurantId);
 	
-	void deleteByFoodId(Integer foodId);
+	void deleteByFoodId(String foodId);
 	
 	
 	boolean existsByUserId(Integer userId);
@@ -40,7 +40,7 @@ public interface UserFavoriteRepository extends JpaRepository<UserFavorite, Inte
     List<Integer> findRestaurantIdsByUserId(@Param("userId") Integer userId);
 	
 	@Query("SELECT uf.foodId FROM UserFavorite uf WHERE uf.userId = :userId AND uf.foodId IS NOT NULL")
-    List<Integer> findFoodIdsByUserId(@Param("userId") Integer userId);
+    List<String> findFoodIdsByUserId(@Param("userId") Integer userId);
 	
 	
 }
