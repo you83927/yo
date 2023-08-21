@@ -1,8 +1,8 @@
 package com.ispan.demo.controller;
 
 import java.util.List;
+import java.util.Map;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -18,11 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ispan.demo.config.Result;
 import com.ispan.demo.model.Article;
-import com.ispan.demo.model.FollowId;
+import com.ispan.demo.model.FavoriteArticleDTO;
 import com.ispan.demo.model.Follower;
 import com.ispan.demo.model.FoodType;
 import com.ispan.demo.model.RestaurantList;
@@ -32,7 +31,6 @@ import com.ispan.demo.service.FollowSrevice;
 import com.ispan.demo.service.UserFavoriteService;
 import com.ispan.demo.service.UserService;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
@@ -71,9 +69,17 @@ public class UserController {
 //			@RequestParam String loginName, @RequestParam String loginPwd,
 			@RequestBody  User login
 			,HttpSession session
-			,HttpServletResponse response) {
+//			,HttpServletResponse response
+			) {
 		
 		User user = userService.checkLogin(login.getUserName(), login.getPassWord());	
+		if (user != null) {
+			user.setPassWord(null);
+			session.setAttribute("user", user);
+//			response.addCookie(cookie);
+			return Result.success("login success");
+		}
+		return Result.error("no Login");
 		
 //	    Cookie cookie = new Cookie("userCookie", login.getUserName());
 //	    cookie.setMaxAge(3600); // 设置 Cookie 过期时间（单位：秒）
@@ -81,13 +87,6 @@ public class UserController {
 //	    cookie.setSecure(true); // 设置 Secure 属性，仅在 HTTPS 连接中传输 Cookie
 //	    cookie.setPath("/"); // 设置 Cookie 的作用路径，根路径下的所有请求都会带上该 Cookie
 	    
-	    if (user != null) {
-			user.setPassWord(null);
-			session.setAttribute("user", user);
-//			response.addCookie(cookie);
-			return Result.success("login success");
-		}
-	    return Result.error("no Login");
 //
 //		if (user != null) {
 //			user.setPassWord(null);
@@ -240,10 +239,11 @@ public class UserController {
 //		return Result.success(favoriteArticleIds);
 //	}
 	@GetMapping("user/favorite/articles")
-	public Result<List<Article>> findFavoriteArticleByUserId(HttpSession session){
+	public Result<List<Object[]>> findFavoriteArticleByUserId(HttpSession session){
 		User user = (User) session.getAttribute("user");
-		List<Article> favoriteArticleIds = userService.findFavoriteArticleByUserId(user.getId());
-		return Result.success(favoriteArticleIds);
+		List<Object[]> list = userService.findFavoriteArticleByUserId(user.getId());
+		
+		return Result.success(list);
 	}
 
 	// 以restaurantId查詢最愛餐廳

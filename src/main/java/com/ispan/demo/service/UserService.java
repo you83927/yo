@@ -3,6 +3,7 @@ package com.ispan.demo.service;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ispan.demo.config.NullCheckUtils;
 import com.ispan.demo.model.Article;
+import com.ispan.demo.model.FavoriteArticleDTO;
 import com.ispan.demo.model.FoodType;
 import com.ispan.demo.model.RestaurantList;
 import com.ispan.demo.model.User;
@@ -202,8 +204,8 @@ public class UserService {
 //        return userRepository.findUserWithFavoriteArticles(userId);
 //    }
 	
-	public List<Article> findFavoriteArticleByUserId(Integer userId){
-		List<Article> list = userRepository.findFavoriteArticleByUserId(userId);
+	public List<Object[]> findFavoriteArticleByUserId(Integer userId){
+		List<Object[]> list = userRepository.findFavoriteArticleByUserId(userId);
 		return list;
 	}
 	

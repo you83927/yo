@@ -36,8 +36,8 @@ public class Article {
 	@Column(name = "ispublic")
 	private Integer isPublic;
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-	@Column(name = "created_date", columnDefinition = "datetime")
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	@Column(name = "created_date", columnDefinition = "DATE")
 	private LocalDateTime createdDate;
 
 	public Integer getId() {
