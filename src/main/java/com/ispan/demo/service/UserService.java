@@ -82,16 +82,16 @@ public class UserService {
 	}
 	
 	//在follower頁面透過userName找user
-	public List<User> findFollowingUsersByUserName(String userName) {
-		 List<User> list = userRepository.findFollowingUsersByUserName(userName);
+	public List<User> findFollowingUsersByUserName(String userName,Integer id) {
+		 List<User> list = userRepository.findFollowingUsersByUserName(userName,id);
 		if (list.isEmpty()) {
 			return null;
 		}
 		return list;
 	}
 	
-	public User findFollowingUsersByFollowing(Integer following) {
-		User user = userRepository.findFollowingUsersByFollowing(following);
+	public User findFollowingUsersByFollowing(Integer userId,Integer following) {
+		User user = userRepository.findFollowingUsersByFollowing(userId,following);
 		if (user==null) {
 			return null;
 		}
@@ -212,6 +212,12 @@ public class UserService {
 	
 	public List<RestaurantList> findFavoriteRestaurantListByUserId(Integer userId){
 		List<RestaurantList> list = userRepository.findFavoriteRestaurantListByUserId(userId);
+		return list;
+	}
+	
+	public Page<RestaurantList> findFavoriteRestaurantListByUserName(Integer userId, String name,int pageNumber, int pageSize){
+		 PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("name").ascending());
+		Page<RestaurantList> list = userRepository.findFavoriteRestaurantListByRestaurantName(userId,name,pageRequest);
 		return list;
 	}
 	

@@ -226,18 +226,7 @@ public class UserController {
 		return Result.success(findByArticleId);
 	}
 
-	// 查詢所有最愛文章
-//	@GetMapping("user/favorite/articles")
-//	public Result<List<Integer>> showUserFavoriteArticles(HttpSession session) {
-//		User user = (User) session.getAttribute("user");
-//		List<Integer> favoriteArticleIds = userFavoriteService.findArticleIdsByUserId(user.getId());
-//
-//		if (favoriteArticleIds.isEmpty()) {
-//			return Result.error("没有 favorite articles");
-//		}
-//
-//		return Result.success(favoriteArticleIds);
-//	}
+
 	@GetMapping("user/favorite/articles")
 	public Result<List<Object[]>> findFavoriteArticleByUserId(HttpSession session){
 		User user = (User) session.getAttribute("user");
@@ -279,6 +268,17 @@ public class UserController {
 	public Result<List<RestaurantList>> findFavoriteRestaurantListByUserId(HttpSession session){
 		User user = (User) session.getAttribute("user");
 	List<RestaurantList> findFavoriteRestaurantListByUserId = userService.findFavoriteRestaurantListByUserId(user.getId());
+		return Result.success(findFavoriteRestaurantListByUserId);
+	}
+	
+	@GetMapping("user/favorite/restaurantsByName")
+	public Result<Page<RestaurantList>> findFavoriteRestaurantListByName(
+			@RequestParam Integer userId,
+			@RequestParam String name,
+			@RequestParam int page,
+	        @RequestParam int size){
+	
+		Page<RestaurantList> findFavoriteRestaurantListByUserId = userService.findFavoriteRestaurantListByUserName(userId,name,page,size);
 		return Result.success(findFavoriteRestaurantListByUserId);
 	}
 
@@ -453,9 +453,9 @@ public class UserController {
 		
 			return Result.success(user);
 	}
-	@GetMapping("user/findFollowingUsersByFollowing/{following}")
-	public Result<User> findFollowingUsersByFollowing(@PathVariable Integer following){
-		User user = userService.findFollowingUsersByFollowing(following);
+	@GetMapping("user/findFollowingUsersByFollowing")
+	public Result<User> findFollowingUsersByFollowing(@RequestParam Integer userId ,@RequestParam Integer following){
+		User user = userService.findFollowingUsersByFollowing(userId, following);
 		if(user==null) {
 			return null;
 		}
@@ -478,10 +478,11 @@ public class UserController {
 	
 	//在follower頁面以userName搜尋其他使用者
 	@GetMapping("user/findOtherUsersInFollowerPage")
-	public Result<List<User>> findFollowingUsersByUserName(@RequestParam String userName){
-		List<User> list = userService.findFollowingUsersByUserName(userName);
+	public Result<List<User>> findFollowingUsersByUserName(@RequestParam String userName,@RequestParam Integer id){
+		List<User> list = userService.findFollowingUsersByUserName(userName,id);
+		System.out.println(list);
 			if(list==null) {
-				System.out.println(list);
+				System.out.println(list); 
 				return null;
 			}
 			return Result.success(list); 
