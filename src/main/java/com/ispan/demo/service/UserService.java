@@ -255,5 +255,13 @@ public class UserService {
 	        // 進行分頁查詢
 	        return userRepository.findAll(pageRequest);
 	    }
+	   
+	   public Page<Object[]> findArticlceByUserId(Integer userId,String title,int pageNumber, int pageSize) {
+	        // 創建分頁請求，指定頁數和每頁顯示的資料數量
+	        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("title").ascending());
+	      
+	        // 進行分頁查詢
+	        return userRepository.findArticleByUserId(userId,title,pageRequest);
+	    }
 	
 }

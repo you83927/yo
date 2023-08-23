@@ -529,6 +529,17 @@ public class UserController {
 	}
 	
 	
+	//找所有使用者
+	@GetMapping("user/findArticlceByUserId")
+	public Result<Page<Object[]>> findAllUser(
+			@RequestParam Integer userId,
+			@RequestParam String title,
+			@RequestParam int page,
+	        @RequestParam int size){
+		Page<Object[]> usersByPage = userService.findArticlceByUserId(userId,title,page, size);
+//		List<User> list = userService.findAllUser();
+			return Result.success(usersByPage); 
+	}
 	
 //	public Result<User> userDetial(@PathVariable Integer id) {
 //	User user = userService.findUserById(id);
