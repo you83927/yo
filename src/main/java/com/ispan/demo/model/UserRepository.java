@@ -31,9 +31,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query("select u,a,u1 from User u INNER join Article a ON  a.userId=u.Id INNER join UserFavorite uf ON a.id=uf.articleId INNER join User u1 ON uf.userId=u1.id  where u1.id = :userId")
 	List<Object[]> findFavoriteArticleByUserId(Integer userId);
 	
-	@Query("select u,a,u1 from User u INNER join Article a ON  a.userId=u.Id INNER join UserFavorite uf ON a.id=uf.articleId INNER join User u1 ON uf.userId=u1.id  where u1.username like %:username%")
-	List<Object[]> findFavoriteArticleByUsername(String username);
-	
+	@Query("select u,a from User u INNER join Article a ON  a.userId=u.Id INNER join UserFavorite uf ON a.id=uf.articleId  where uf.userId=:userId AND a.title like %:title%")
+	Page<Object[]> findFavoriteArticleByUsername(Integer userId,String title,Pageable pageable);
+//			 select * from [User] u INNER join Article a ON  a.user_Id=u.Id INNER join User_Fav uf ON a.id=uf.article_Id where uf.user_id=1 and a.title like '%%'			
 	//餐廳
 	@Query("select r from RestaurantList r INNER join UserFavorite uf ON r.id=uf.restaurantId INNER join User u ON uf.userId=u.id where u.id = :userId")
 	List<RestaurantList> findFavoriteRestaurantListByUserId(Integer userId);
@@ -45,8 +45,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query("select f from FoodType f INNER join UserFavorite uf ON f.id=uf.foodId INNER join User u ON uf.userId=u.id where u.id = :userId")
 	List<FoodType> findFavoriteFoodTypeByUserId(Integer userId);
 	
-	@Query("select f from FoodType f INNER join UserFavorite uf ON f.id=uf.foodId INNER join User u ON uf.userId=u.id where f.foodType like %:foodType%")
-	List<FoodType> findFavoriteFoodTypeByFoodType(String foodType);
+	@Query("select f from FoodType f INNER join UserFavorite uf ON f.id=uf.foodId INNER join User u ON u.id=:userId where f.foodType like %:foodType%")
+	Page<FoodType> findFavoriteFoodTypeByFoodType(Integer userId,String foodType,Pageable pageable);
 	
 //	@Query("select f from Follower f INNER JOIN User u ON f.following=u.id where u.id=:userId")
 //	List<Follower> findFollowerByUserId(Integer userId);
@@ -59,7 +59,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	User findFollowingUsersByFollowing(Integer userId,Integer following);
 	
 	@Query("SELECT u FROM User u INNER JOIN Follower f ON u.id = f.id.following WHERE f.id.userId=:id AND u.username like %:username%")
-    List<User> findFollowingUsersByUserName(String username,Integer id);
+	Page<User> findFollowingUsersByUserName(String username,Integer id,Pageable pageable);
 
 
 

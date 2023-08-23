@@ -234,6 +234,19 @@ public class UserController {
 		
 		return Result.success(list);
 	}
+	
+	@GetMapping("user/favorite/articlesByTitle")
+	public Result<Page<Object[]>> findFavoriteArticleByUsername(@RequestParam Integer userId,
+			@RequestParam String title,
+			@RequestParam int page,
+	        @RequestParam int size){
+		Page<Object[]> list = userService.findFavoriteArticleByUsername(userId,title,page,size);
+		
+		return Result.success(list);
+	}
+	
+
+	
 
 	// 以restaurantId查詢最愛餐廳
 	@GetMapping("user/favorite/restaurant")
@@ -316,6 +329,18 @@ public class UserController {
 	List<FoodType> findFavoriteFoodTypeByUserId = userService.findFavoriteFoodTypeByUserId(user.getId());
 		return Result.success(findFavoriteFoodTypeByUserId);
 	}
+	
+	@GetMapping("user/favorite/foodsByFoodtype")
+	public Result<Page<FoodType>> findFavoriteFoodTypeByFoodtype(
+			@RequestParam Integer userId,
+			@RequestParam String foodType,
+			@RequestParam int page,
+	        @RequestParam int size){
+		Page<FoodType> list = userService.findFavoriteFoodTypeByFoodtype(userId,foodType,page,size);
+		return Result.success(list);
+	}
+	
+
  
 	// 新增最愛的文章
 	@PostMapping("user/favorite/insert/article")
@@ -478,8 +503,12 @@ public class UserController {
 	
 	//在follower頁面以userName搜尋其他使用者
 	@GetMapping("user/findOtherUsersInFollowerPage")
-	public Result<List<User>> findFollowingUsersByUserName(@RequestParam String userName,@RequestParam Integer id){
-		List<User> list = userService.findFollowingUsersByUserName(userName,id);
+	public Result<Page<User>> findFollowingUsersByUserName(
+			@RequestParam String userName,
+			@RequestParam Integer id,
+			@RequestParam int page,
+	        @RequestParam int size){
+		Page<User> list = userService.findFollowingUsersByUserName(userName,id,page,size);
 		System.out.println(list);
 			if(list==null) {
 				System.out.println(list); 

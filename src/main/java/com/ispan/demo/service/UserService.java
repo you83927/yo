@@ -82,8 +82,9 @@ public class UserService {
 	}
 	
 	//在follower頁面透過userName找user
-	public List<User> findFollowingUsersByUserName(String userName,Integer id) {
-		 List<User> list = userRepository.findFollowingUsersByUserName(userName,id);
+	public Page<User> findFollowingUsersByUserName(String userName,Integer id,int pageNumber, int pageSize) {
+		PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("username").ascending());
+		 Page<User> list = userRepository.findFollowingUsersByUserName(userName,id,pageRequest);
 		if (list.isEmpty()) {
 			return null;
 		}
@@ -210,6 +211,12 @@ public class UserService {
 	}
 	
 	
+	public Page<Object[]> findFavoriteArticleByUsername(Integer userId,String title,int pageNumber, int pageSize){
+		 PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("a.title").ascending());
+		Page<Object[]> list = userRepository.findFavoriteArticleByUsername(userId,title,pageRequest);
+		return list;
+	}
+	
 	public List<RestaurantList> findFavoriteRestaurantListByUserId(Integer userId){
 		List<RestaurantList> list = userRepository.findFavoriteRestaurantListByUserId(userId);
 		return list;
@@ -223,6 +230,12 @@ public class UserService {
 	
 	public List<FoodType> findFavoriteFoodTypeByUserId(Integer userId){
 		List<FoodType> list = userRepository.findFavoriteFoodTypeByUserId(userId);
+		return list;
+	}
+
+	public Page<FoodType> findFavoriteFoodTypeByFoodtype(Integer userId, String foodType,int pageNumber, int pageSize){
+		 PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("foodType").ascending());
+		Page<FoodType> list = userRepository.findFavoriteFoodTypeByFoodType(userId,foodType,pageRequest);
 		return list;
 	}
 	
