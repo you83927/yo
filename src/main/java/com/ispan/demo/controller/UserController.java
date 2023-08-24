@@ -388,6 +388,18 @@ public class UserController {
 		userFavoriteService.deleteUserByArticleId(articleId);
 		return Result.success("刪除成功");
 	}
+	
+	// 刪除的文章
+	@Transactional
+	@DeleteMapping("user/delete/article")
+	public Result<String> deleteUserArticle(@RequestParam Integer userId, @RequestParam Integer articleId) {
+		List<UserFavorite> findByUserId = userFavoriteService.findByUserId(userId);
+		if (findByUserId.isEmpty()) {
+			return Result.error("沒有資料");
+		}
+		userFavoriteService.deleteUserByArticleId(articleId);
+		return Result.success("刪除成功");
+	}
 
 	// 刪除最愛的餐廳
 	@Transactional
@@ -534,9 +546,10 @@ public class UserController {
 	public Result<Page<Object[]>> findAllUser(
 			@RequestParam Integer userId,
 			@RequestParam String title,
+			@RequestParam Integer type,
 			@RequestParam int page,
 	        @RequestParam int size){
-		Page<Object[]> usersByPage = userService.findArticlceByUserId(userId,title,page, size);
+		Page<Object[]> usersByPage = userService.findArticlceByUserId(userId,title,type,page, size);
 //		List<User> list = userService.findAllUser();
 			return Result.success(usersByPage); 
 	}

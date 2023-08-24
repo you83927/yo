@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
@@ -61,8 +63,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query("SELECT u FROM User u INNER JOIN Follower f ON u.id = f.id.following WHERE f.id.userId=:id AND u.username like %:username%")
 	Page<User> findFollowingUsersByUserName(String username,Integer id,Pageable pageable);
 
-	@Query("select a,u from Article a INNER JOIN User u on a.userId=u.id where u.id=:userId AND a.title like %:title% ")
-	Page<Object[]> findArticleByUserId(Integer userId,String title,Pageable pageable);
+//	@Query("select a,u from Article a INNER JOIN User u on a.userId=u.id where u.id=:userId AND a.title like %:title% ")
+//	Page<Object[]> findArticleByUserId(Integer userId,String title,Pageable pageable);
+	
+	@Query("select a,u from Article a INNER JOIN User u on a.userId=u.id where u.id=:userId AND a.type=:type AND a.title like %:title% ")
+	Page<Object[]> findArticleByUserId(Integer userId,String title,Integer type,Pageable pageable);
+	
 	
 
 }
