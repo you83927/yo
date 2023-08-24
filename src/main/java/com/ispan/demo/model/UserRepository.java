@@ -40,14 +40,14 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query("select r from RestaurantList r INNER join UserFavorite uf ON r.id=uf.restaurantId INNER join User u ON uf.userId=u.id where u.id = :userId")
 	List<RestaurantList> findFavoriteRestaurantListByUserId(Integer userId);
 	
-	@Query("select r from RestaurantList r INNER join UserFavorite uf ON r.id=uf.restaurantId INNER join User u ON u.id=:userId where  r.name like %:name%")
+	@Query("select r from RestaurantList r INNER join UserFavorite uf ON r.id=uf.restaurantId INNER join User u ON u.id=uf.userId where u.id=:userId AND  r.name like %:name%")
 	Page<RestaurantList> findFavoriteRestaurantListByRestaurantName(Integer userId, String name,Pageable pageable);
 	
 	//食物
 	@Query("select f from FoodType f INNER join UserFavorite uf ON f.id=uf.foodId INNER join User u ON uf.userId=u.id where u.id = :userId")
 	List<FoodType> findFavoriteFoodTypeByUserId(Integer userId);
 	
-	@Query("select f from FoodType f INNER join UserFavorite uf ON f.id=uf.foodId INNER join User u ON u.id=:userId where f.foodType like %:foodType%")
+	@Query("select f from FoodType f INNER join UserFavorite uf ON f.id=uf.foodId INNER join User u ON u.id=uf.userId where u.id=:userId AND f.foodType like %:foodType%")
 	Page<FoodType> findFavoriteFoodTypeByFoodType(Integer userId,String foodType,Pageable pageable);
 	
 //	@Query("select f from Follower f INNER JOIN User u ON f.following=u.id where u.id=:userId")
