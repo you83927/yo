@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 	User findByUsername(String username);
 	
-	@Query("select u from User u where username like %:username%")
+	@Query("select u from User u where u.username like %:username%")
 	List<User> findByUserNames(String username);
 	
 	@Query("select u from User u where u.username like %:username%")

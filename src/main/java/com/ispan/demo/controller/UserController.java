@@ -129,7 +129,7 @@ public class UserController {
 		System.out.println("123"+JSESSIONID);
 		System.out.println("456"+session.getAttribute("user"));
 		if(session.getAttribute("user")==null) {
-			return null;
+			return Result.error("請先登入");
 		}
 		User user = (User) session.getAttribute("user");
 		
@@ -311,18 +311,7 @@ public class UserController {
 		return Result.success(findByFoodId);
 	}
 
-	// 查詢所有最愛食物
-//	@GetMapping("user/favorite/foods")
-//	public Result<List<Integer>> showUserFavoriteFoods(HttpSession session) {
-//		User user = (User) session.getAttribute("user");
-//		List<Integer> favoriteFoods = userFavoriteService.findFoodIdsByUserId(user.getId());
-//
-//		if (favoriteFoods.isEmpty()) {
-//			return Result.error("没有 favorite foods");
-//		}
-//		return Result.success(favoriteFoods);
-//	}
-//	
+
 	@GetMapping("user/favorite/foods")
 	public Result<List<FoodType>> findFavoriteFoodTypeByUserId(HttpSession session){
 		User user = (User) session.getAttribute("user");

@@ -110,7 +110,7 @@ public class UserService {
 		}
 		 User getUser = option.get();
 		 
-		 
+		
 		NullCheckUtils.copyPropertiesNonNull(user, getUser);
 		System.out.println(getUser.getPhoto().length);
 		if(getUser.getPhoto() != null && getUser.getPhoto().length==0) {
