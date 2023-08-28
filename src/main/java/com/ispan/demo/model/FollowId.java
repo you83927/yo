@@ -8,13 +8,19 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class FollowId implements Serializable {
-
+	
 	@Column(name = "user_id")
 	private Integer userId;
 
 	@Column(name = "following")
 	private Integer following;
 
+	
+	
+	
+	
+	
+	
 	public Integer getUserId() {
 		return userId;
 	}

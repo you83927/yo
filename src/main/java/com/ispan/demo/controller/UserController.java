@@ -48,6 +48,8 @@ public class UserController {
 	
 	@Autowired
 	private FollowSrevice followSrevice;
+	
+	
 
 	// 初始註冊
 	@PostMapping("user/insert")
@@ -77,7 +79,7 @@ public class UserController {
 			user.setPassword(null);
 			session.setAttribute("user", user);
 //			response.addCookie(cookie);
-			return Result.success("login success");
+			return Result.success("登入成功");
 		}
 		return Result.error("no Login");
 		
@@ -102,7 +104,6 @@ public class UserController {
 	@PostMapping("user/logout")
 	public Result<String> logoutUser(HttpSession session,SessionStatus sessionStatus) {
 		User user = (User) session.getAttribute("user");
-		System.out.println(user+"  123");
 		if(user!=null) {
 			session.invalidate();
 //			session.removeAttribute("user");
@@ -111,17 +112,11 @@ public class UserController {
 		}
 //		session.invalidate();
 
-		return Result.success("logout ok");
+		return Result.success("登出成功");
 
 	}
 
-	// 基本資料
-//	@GetMapping("user/{id}")
-//	public Result<User> userDetial(@PathVariable Integer id) {
-//		User user = userService.findUserById(id);
-//
-//		return Result.success(user);
-//	}
+
 	
 	// 基本資料
 	@GetMapping("user/detial")
@@ -375,20 +370,23 @@ public class UserController {
 			return Result.error("指定的文章 ID 不存在於使用者的收藏中");
 		}
 		userFavoriteService.deleteUserByArticleId(articleId);
+		
 		return Result.success("刪除成功");
 	}
 	
-	// 刪除的文章
-	@Transactional
-	@DeleteMapping("user/delete/article")
-	public Result<String> deleteUserArticle(@RequestParam Integer userId, @RequestParam Integer articleId) {
-		List<UserFavorite> findByUserId = userFavoriteService.findByUserId(userId);
-		if (findByUserId.isEmpty()) {
-			return Result.error("沒有資料");
-		}
-		userFavoriteService.deleteUserByArticleId(articleId);
-		return Result.success("刪除成功");
-	}
+//	// 刪除的文章
+//	@Transactional
+//	@DeleteMapping("user/delete/article")
+//	public Result<String> deleteUserArticle(@RequestParam Integer userId, @RequestParam Integer articleId) {
+//		List<UserFavorite> findByUserId = userFavoriteService.findByUserId(userId);
+//		if (findByUserId.isEmpty()) {
+//			return Result.error("沒有資料");
+//		}else {
+//			
+//		userFavoriteService.deleteUserByArticleId(articleId);
+//		return Result.success("刪除成功");
+//		}
+//	}
 
 	// 刪除最愛的餐廳
 	@Transactional
@@ -451,7 +449,7 @@ public class UserController {
 		}
 		followSrevice.deleteFollowerByFollowing(id);
 		System.out.println(id);
-		return Result.success("刪除成功");
+		return Result.success("取消追蹤");
 	}
 	
 	//新增追蹤
@@ -532,7 +530,7 @@ public class UserController {
 	
 	//找所有使用者
 	@GetMapping("user/findArticlceByUserId")
-	public Result<Page<Object[]>> findAllUser(
+	public Result<Page<Object[]>> findArticlceByUserId(
 			@RequestParam Integer userId,
 			@RequestParam String title,
 			@RequestParam Integer type,
@@ -542,6 +540,19 @@ public class UserController {
 //		List<User> list = userService.findAllUser();
 			return Result.success(usersByPage); 
 	}
+	
+	@GetMapping("user/findArticlceByUserIdAsc")
+	public Result<Page<Object[]>> findArticlceByUserIdAsc(
+			@RequestParam Integer userId,
+			@RequestParam Integer type,
+			@RequestParam int page,
+	        @RequestParam int size){
+		Page<Object[]> usersByPage = userService.findArticlceByUserIdAsc(userId,type,page, size);
+//		List<User> list = userService.findAllUser();
+			return Result.success(usersByPage);   
+	}
+	
+	
 	
 //	public Result<User> userDetial(@PathVariable Integer id) {
 //	User user = userService.findUserById(id);

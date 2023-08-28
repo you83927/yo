@@ -263,5 +263,13 @@ public class UserService {
 	        // 進行分頁查詢
 	        return userRepository.findArticleByUserId(userId,title,type,pageRequest);
 	    }
+	   
+	   public Page<Object[]> findArticlceByUserIdAsc(Integer userId,Integer type,int pageNumber, int pageSize) {
+	        // 創建分頁請求，指定頁數和每頁顯示的資料數量
+	        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("createdDate").descending());
+	      
+	        // 進行分頁查詢
+	        return userRepository.findArticleByUserIdAsc(userId,type,pageRequest);
+	    }
 	
 }

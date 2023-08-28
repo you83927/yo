@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FollowRepository extends JpaRepository<Follower, Integer> {
+public interface FollowRepository extends JpaRepository<Follower, FollowId> {
 
 	
     @Query("SELECT f FROM Follower f WHERE f.id.following = :following")

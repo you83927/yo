@@ -57,6 +57,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query("SELECT u FROM User u INNER JOIN Follower f ON u.id = f.id.following WHERE f.id.userId = :userId")
 	Page<User> findFollowingUsersByUserId(Integer userId,Pageable pageable);
 	
+	
 	@Query("SELECT u FROM User u INNER JOIN Follower f ON u.id = f.id.following WHERE f.id.userId = :userId AND f.id.following = :following")
 	User findFollowingUsersByFollowing(Integer userId,Integer following);
 	
@@ -69,6 +70,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query("select a,u from Article a INNER JOIN User u on a.userId=u.id where u.id=:userId AND a.type=:type AND a.title like %:title% ")
 	Page<Object[]> findArticleByUserId(Integer userId,String title,Integer type,Pageable pageable);
 	
+	@Query("select a,u from Article a INNER JOIN User u on a.userId=u.id where u.id=:userId AND a.type=:type ")
+	Page<Object[]> findArticleByUserIdAsc(Integer userId,Integer type,Pageable pageable);
 	
 
 }

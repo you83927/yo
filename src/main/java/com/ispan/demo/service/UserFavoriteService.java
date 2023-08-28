@@ -12,6 +12,7 @@ import com.ispan.demo.model.UserFavoriteRepository;
 import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class UserFavoriteService {
 
 	@Autowired
@@ -82,6 +83,7 @@ public class UserFavoriteService {
 	}
 
 	// 以articleId刪除
+	
 	public void deleteUserByArticleId(Integer articleId) {
 		userFavoriteRepository.deleteByArticleId(articleId);
 	}
@@ -109,6 +111,7 @@ public class UserFavoriteService {
 	public List<String> findFoodIdsByUserId(Integer userId) {
 		return userFavoriteRepository.findFoodIdsByUserId(userId);
 	}
+
 
 
 }
